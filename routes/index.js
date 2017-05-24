@@ -8,9 +8,15 @@ router.get('/', function(req, res, next) {
   res.render('index');
 });
 
-// Pagina de creditos
+// Pagina de creditos /Autores
 router.get('/author', function(req, res, next) {
     res.render('author');
+});
+
+
+// Pagina de ayuda
+router.get('/ayuda', function(req, res, next) {
+    res.render('ayuda');
 });
 
 
@@ -31,10 +37,18 @@ router.get('/quizzes/:quizId(\\d+)/play',  quizController.play);
 router.get('/quizzes/:quizId(\\d+)/check', quizController.check);
 
 
-// Pagina de ayuda
-router.get('/ayuda', function(req, res, next) {
-    res.render('ayuda');
-});
+
+//Definicion de rutas de random
+router.get('/quizzes/randomplay', quizController.randomplay);
+router.get('/quizzes/randomcheck/:quizId(\\d+)', quizController.randomcheck);
+
+
+
+/*// Pagina de juego
+router.get('/play', function(req, res, next) {
+    res.render('quizzes/random_play');
+});*/
+
 
 
 module.exports = router;

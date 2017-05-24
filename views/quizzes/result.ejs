@@ -1,7 +1,9 @@
-
 <h1>
     Resultado:
 </h1>
+<div>
+    Preguntas acertadas = <span id="score"><%=score %></span>
+</div>
 
 <p>
     La respuesta <strong> <%= answer %> </strong> es <%= result ? 'Correcta' : 'Incorrecta' %>.
@@ -9,8 +11,10 @@
 
 <p>
     <% if (!result) { %>
-       <a href="/quizzes/<%= quiz.id %>/play?answer=<%= answer %>"> Inténtelo otra vez </a>
-    <% } %>
+       <a href="/quizzes/<%= quiz.id %>/play?answer=<%= answer %>">Intétnalo otra vez </a>
+    <% }else{ %>
+	<a href="/quizzes"><button>Continuar</button></a>
+	<% }%>
 </p>
 
-<a href="/quizzes"><button>Volver</button></a>
+
