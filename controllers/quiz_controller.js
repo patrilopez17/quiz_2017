@@ -192,6 +192,7 @@ exports.randomplay = function (req, res, next) {
         req.session.randomplay.resolved=aux;
 
     }
+  
 
     var used = req.session.randomplay.resolved.length ? req.session.randomplay.resolved:[-1];
     var whereopt = {'id': {$notIn: used}};
@@ -232,13 +233,23 @@ exports.randomcheck = function (req, res, next) {
     if(result){
         req.session.randomplay.resolved.push(parseInt(req.quiz.id));
     
-}
+
     res.render('quizzes/random_result', {
         score: req.session.randomplay.resolved.length,
         quizId: req.quiz.id,
         answer: answer,
         result: result
    
-    });
+    });}
+	  if(!result){
+         
+	res.render('quizzes/random_result', {
+        score: req.session.randomplay.resolved =0,
+        quizId: req.quiz.id,
+        answer: answer,
+        result: result
+ });
+}
+
 
 };
