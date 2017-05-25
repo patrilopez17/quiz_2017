@@ -215,7 +215,7 @@ exports.randomplay = function (req, res, next) {
         })
         .then(function (quiz) {
 
-            res.render('quizzes/random_play', {
+            res.render('quizzes/randomplay', {
                 quiz: quiz[0],
                 score: req.session.randomplay.resolved.length
             });
