@@ -1,8 +1,4 @@
 
-<div class="right">
-    <small> (by <%= quiz.Author ? quiz.Author.username : "Anómino" %>) </small>
-</div>
-
 <h1>
     Ver pregunta:
 </h1>
@@ -11,23 +7,5 @@
     <li>Pregunta: <b><%= quiz.question %></b></li>
     <li>Respuesta: <b><%= quiz.answer %></b></li>
 </ul>
-
-<a href="/goback"><button>volver</button></a>
-
-
-<h1>
-    Pistas:
-</h1>
-
-<% if (session.user) { %>
-    <% include ../tips/new %>
-<% } %>
-
-<% var tips = quiz.Tips; %>
-<% var quizId = quiz.id; %>
-<% var quizAuthorId = quiz.AuthorId; %>
-
-<% include ../tips/index %>
-
 
 <a href="/quizzes"><button>Volver</button></a>

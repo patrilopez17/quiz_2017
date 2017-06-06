@@ -26,23 +26,19 @@ var sequelize = new Sequelize(url, {storage: storage});
 // Importar la definicion de la tabla Quiz de quiz.js
 var Quiz = sequelize.import(path.join(__dirname, 'quiz'));
 
-
-// Importar la definicion de la tabla Tips de tips.js
-var Tip = sequelize.import(path.join(__dirname,'tip'));
-
-// Importar la definicion de la tabla Users de user.js
-var User = sequelize.import(path.join(__dirname,'user'));
-
-
-// Relaciones entre modelos
-Tip.belongsTo(Quiz);
-Quiz.hasMany(Tip);
-
-// Relacion 1 a N entre User y Quiz:
-User.hasMany(Quiz, {foreignKey: 'AuthorId'});
-Quiz.belongsTo(User, {as: 'Author', foreignKey: 'AuthorId'});
+// Create and initiate table 
+sequelize.sync().then(function() {
+  Quiz.count().then(function(count) {
+    if(count === 0) {
+      Quiz.create({
+        question: 'Capital de Italia',
+        answer: 'Roma'
+      }).then(function() {
+        console.log('Quizzes table initialized with data');
+      });
+    }
+  })
+});
 
 
 exports.Quiz = Quiz; // exportar definición de tabla Quiz
-exports.Tip = Tip;   // exportar definición de tabla Tips
-exports.User = User; // exportar definición de tabla Users

@@ -1,9 +1,4 @@
 
-
-<div class="right">
-    <small> (by <%= quiz.Author ? quiz.Author.username : "Anómino" %>) </small>
-</div>
-
 <h1>
     Jugar:
 </h1>
@@ -19,21 +14,5 @@
         <input type="submit" class="itemNarrow" value="Comprobar">
     </div>
 </form>
-
-
-<h1>
-    Pistas:
-</h1>
-
-<% if (session.user) { %>
-    <% include ../tips/new %>
-<% } %>
-
-<% var tips = quiz.Tips; %>
-<% var quizId = quiz.id; %>
-<% var quizAuthorId = quiz.AuthorId; %>
-
-<% include ../tips/index %>
-
 
 <a href="/quizzes"><button>Volver</button></a>
