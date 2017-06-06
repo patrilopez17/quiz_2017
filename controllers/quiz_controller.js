@@ -5,9 +5,15 @@ var paginate = require('../helpers/paginate').paginate;
 
 
 //Autoload el quiz asociado a :quizId
+
 exports.load = function (req, res, next, quizId) {//Incluimos un parametro en la peticion que es quiz, solo si existe
     models.Quiz.findById(quizId)//Realizamos la consulta a la base de datos
         .then(function (quiz) {//que nos devuelve un quiz, que es el que pasamos como parametro en la peticion
+
+exports.load = function (req, res, next, quizId) {
+    models.Quiz.findById(quizId)
+        .then(function (quiz) {
+
             if(quiz){
                 req.quiz = quiz;
                 next();
@@ -27,7 +33,11 @@ exports.index = function (req, res, next) {
 
     var countOptions = {};
 
+
     //Busquedas:
+
+    
+
     var search = req.query.search || '';
     if(search){
         var search_like = "%" + search.replace(/ +/g,"%") + "%";
@@ -37,12 +47,19 @@ exports.index = function (req, res, next) {
     models.Quiz.count(countOptions)
         .then(function (count) {
 
+
             //Elemento para paginacion
             var itmes_per_page = 10;
             //Extraemos el num de pagina a mostrar que viene en la query
             //si no viene ninguno ponemos la primera pagina por defecto.
             var pageno = parseInt(req.query.pageno) || 1;
             //Creamos un string para que pinte la botonera y se añade como variable al layout
+
+           
+            var itmes_per_page = 10;
+            
+            var pageno = parseInt(req.query.pageno) || 1;
+            
             res.locals.paginate_control = paginate(count, itmes_per_page, pageno, req.url);
             var findOptions = countOptions;
 
@@ -70,27 +87,44 @@ exports.show=function (req, res, next) {
 };
 
 //GET /quizzes/new
+
 exports.new = function (req, res, next) {//Funcion que se encarga de mandar al usuario a la vista de crear
+
+
+exports.new = function (req, res, next) {
 
     var quiz = {question: "", answer: ""};
     res.render('quizzes/new', {quiz: quiz});
 };
 
 //POST /quizzes
+
 exports.create = function (req, res, next) {//funcion que a partir de los datos rellenados por el usuario crea la pregunta
 
     var quiz= models.Quiz.build({//Extraemos los datos que ha rellenado el usuario en el formulario
+
+exports.create = function (req, res, next) {
+
+    var quiz= models.Quiz.build({
+
        question: req.body.question,
        answer: req.body.answer
     });
 
+
     //ahora guardamos los datos
+
+
     quiz.save({fields: ["question", "answer"]})
         .then(function (quiz) {
             req.flash('success', 'Quiz creado con éxito');
             res.redirect('/quizzes/' + quiz.id);
         })
+
         .catch(Sequelize.ValidationError, function (error) {//Si algun dato no es correcto motramos en la consola los errores
+
+        .catch(Sequelize.ValidationError, function (error) {
+
             req.flash('error', 'Errores en el formulario:');
             for (var i in error.errors){
                 req.flash('error', error.errors[i].value);
@@ -111,23 +145,41 @@ exports.edit = function (req, res, next) {
 };
 
 // PUT /quizzes/:quizId
+<<<<<<< HEAD
 exports.update = function (req, res, next) {//Funcion que se encarga de actualizar los cambios
 //que ha realizado el usuario en una pregunta
     req.quiz.question = req.body.question;//Recuperamos los valores del formulario
     req.quiz.answer = req.body.answer; //Y los metemos en la respuesta
 
     req.quiz.save({fields: ["question", "answer"]})//Guardamos los campos en la BBDD
+
+exports.update = function (req, res, next) {
+
+    req.quiz.question = req.body.question;
+    req.quiz.answer = req.body.answer; 
+
+    req.quiz.save({fields: ["question", "answer"]})
+
         .then(function (quiz) {
             req.flash('success', 'Quiz editado con éxito');
             res.redirect('/quizzes/' + req.quiz.id);
         })
+
         .catch (Sequelize.ValidationError, function (error) {//Si algun cajetin esta vacio
+
+        .catch (Sequelize.ValidationError, function (error) {
+
             req.flash('error', 'Errores en el formulario:');
             for (var i in error.errors){
                 req.flash('error', error.errors[i].value);
             }
+
             res.render('quizzes/edit', {quiz: req.quiz});//volvemos a mandar al usuario a edit
         })//Para que corrija los errores
+
+            res.render('quizzes/edit', {quiz: req.quiz});
+        })
+
         .catch(function (error) {
             req.flash('error', 'Error al editar el  Quiz:' + error.message);
             next(error);
@@ -137,10 +189,17 @@ exports.update = function (req, res, next) {//Funcion que se encarga de actualiz
 // DELETE /quizzes/:quizId
 exports.destroy = function (req, res, next) {
 
+<<<<<<< HEAD
    req.quiz.destroy()//Destruimos el quiz de la BBDD
        .then(function () {
            req.flash('success', 'Quiz borrado con exito.');
            res.redirect('/quizzes');//Volvemos al index de quizzes
+=======
+   req.quiz.destroy()
+       .then(function () {
+           req.flash('success', 'Quiz borrado con exito.');
+           res.redirect('/quizzes');
+
        })
        .catch(function (error) {
            req.flash('error', 'Error al borrar el Quiz' + error.message);
@@ -153,7 +212,11 @@ exports.destroy = function (req, res, next) {
 // GET /quizzes/:quizId/play
 exports.play = function (req, res, next) {
 
+
     var answer = req.query.answer || ''; //Recuperamos la respuesta introducida por el usuario
+
+    var answer = req.query.answer || ''; 
+
     res.render('quizzes/play', {
             quiz: req.quiz,
             answer: answer
@@ -167,8 +230,12 @@ exports.check = function (req, res, next) {
 
     var answer = req.query.answer || "";
 
+
     var result = answer.toLowerCase().trim() === req.quiz.answer.toLowerCase().trim();//Si el usuario acierta -> true
 
+
+    var result = answer.toLowerCase().trim() === req.quiz.answer.toLowerCase().trim();
+>>>>>>> practica52
     res.render('quizzes/result', {
             quiz: req.quiz,
             result: result,
@@ -197,6 +264,8 @@ exports.randomplay = function (req, res, next) {
 
     }
 
+
+
     var used = req.session.randomplay.resolved.length ? req.session.randomplay.resolved:[-1];
     var whereopt = {'id': {$notIn: used}};
     models.Quiz.count()
@@ -218,7 +287,11 @@ exports.randomplay = function (req, res, next) {
         })
         .then(function (quiz) {
 
+
             res.render('quizzes/random_play', {
+
+            res.render('quizzes/randomplay', {
+
                 quiz: quiz[0],
                 score: req.session.randomplay.resolved.length
             });
@@ -232,7 +305,11 @@ exports.randomplay = function (req, res, next) {
 // GEt /quizzes/randomcheck
 exports.randomcheck = function (req, res, next) {
     var answer = req.query.answer || "";
+
     var result = answer.toLowerCase().trim() === req.quiz.answer.toLowerCase().trim();//Si el usuario acierta -> true
+
+    var result = answer.toLowerCase().trim() === req.quiz.answer.toLowerCase().trim();
+
     if(result){
         req.session.randomplay.resolved.push(parseInt(req.quiz.id));
     
@@ -253,4 +330,5 @@ exports.randomcheck = function (req, res, next) {
         result: result
  });
 }
+
 };
